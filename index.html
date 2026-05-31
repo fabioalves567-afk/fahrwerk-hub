@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#001e50">
+<title>FAHRWERK DIGITAL HUB</title>
+<style>
+  :root{
+    --vw-blue:#001e50;
+    --vw-blue2:#0040c1;
+    --vw-cyan:#00b0ff;
+    --gray:#1a1a2e;
+    --green:#00c853;
+    --yellow:#ffd600;
+    --red:#d50000;
+    --bg:#070b16;
+    --bg2:#0d1326;
+    --card:#121a30;
+    --card2:#0f1730;
+    --line:rgba(255,255,255,.08);
+    --txt:#eaf0ff;
+    --txt2:#9fb0d6;
+    --radius:12px;
+    --safe-top:env(safe-area-inset-top,0px);
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI",Roboto,system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--txt);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* Fundo industrial 4.0 */
+  .bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .bg-fx::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(900px 500px at 80% -10%, rgba(0,64,193,.28), transparent 60%),
+      radial-gradient(700px 500px at -10% 110%, rgba(0,176,255,.16), transparent 60%),
+      linear-gradient(180deg,#070b16 0%, #0a1024 100%);
+  }
+  .bg-fx::after{
+    content:"";position:absolute;inset:0;opacity:.35;
+    background-image:
+      linear-gradient(rgba(0,176,255,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,176,255,.06) 1px, transparent 1px);
+    background-size:44px 44px;
+    mask-image:radial-gradient(circle at 50% 35%, #000 0%, transparent 75%);
+    -webkit-mask-image:radial-gradient(circle at 50% 35%, #000 0%, transparent 75%);
+  }
+  #app{position:relative;z-index:1;min-height:100%;display:flex;flex-direction:column}
+
+  /* HEADER */
+  header.topbar{
+    position:sticky;top:0;z-index:30;
+    padding:calc(var(--safe-top) + 10px) 14px 10px;
+    background:linear-gradient(180deg, rgba(0,30,80,.96), rgba(7,11,22,.85));
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-row{display:flex;align-items:center;gap:10px}
+  .icon-btn{
+    width:42px;height:42px;flex:0 0 auto;border:none;border-radius:10px;
+    background:rgba(255,255,255,.06);color:var(--txt);font-size:20px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    transition:background .15s,transform .1s;
+  }
+  .icon-btn:active{transform:scale(.92);background:rgba(255,255,255,.14)}
+  .brand{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.05}
+  .brand .vw{
+    display:inline-flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.5px;
+    font-size:15px;
+  }
+  .vw-logo{
+    width:26px;height:26px;border-radius:50%;flex:0 0 auto;
+    border:2px solid #fff;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:900;color:#fff;
+    background:linear-gradient(135deg,var(--vw-blue2),var(--vw-blue));
+    box-shadow:0 0 12px rgba(0,176,255,.5);
+  }
+  .brand .slogan{font-size:10px;color:var(--txt2);letter-spacing:.6px;margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .clock{
+    flex:0 0 auto;text-align:right;font-variant-numeric:tabular-nums;
+  }
+  .clock .h{font-size:17px;font-weight:700;letter-spacing:1px;font-family:Consolas,Menlo,monospace}
+  .clock .d{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px}
+
+  /* SEARCH */
+  .searchwrap{margin-top:10px;display:none}
+  .searchwrap.open{display:block;animation:drop .2s ease}
+  @keyframes drop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .searchwrap input{
+    width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);
+    background:rgba(0,0,0,.35);color:var(--txt);font-size:15px;outline:none;
+  }
+  .searchwrap input::placeholder{color:#5d6b94}
+
+  /* MAIN */
+  main{flex:1;padding:16px 14px calc(28px + var(--safe-bottom))}
+
+  /* HERO HOME */
+  .hero{
+    border-radius:16px;padding:20px 18px;margin-bottom:18px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg, rgba(0,64,193,.35), rgba(0,30,80,.55));
+    border:1px solid rgba(0,176,255,.25);
+    box-shadow:0 10px 40px rgba(0,32,90,.45);
+    animation:rise .5s ease both;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;
+    background:radial-gradient(circle, rgba(0,176,255,.35), transparent 70%);
+  }
+  .hero .badge{
+    display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;color:#9fe1ff;
+    background:rgba(0,176,255,.12);border:1px solid rgba(0,176,255,.3);
+    padding:5px 10px;border-radius:30px;margin-bottom:12px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);
+    animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .hero h1{font-size:23px;font-weight:800;letter-spacing:.5px;line-height:1.1}
+  .hero h1 span{color:var(--vw-cyan)}
+  .hero p.wel{color:var(--txt2);font-size:13px;margin-top:8px;line-height:1.45}
+  .hero .cta{
+    margin-top:16px;width:100%;border:none;border-radius:11px;padding:13px;cursor:pointer;
+    background:linear-gradient(135deg,var(--vw-cyan),var(--vw-blue2));color:#fff;
+    font-size:15px;font-weight:700;letter-spacing:.3px;
+    box-shadow:0 6px 20px rgba(0,64,193,.5);transition:transform .1s,filter .15s;
+  }
+  .hero .cta:active{transform:translateY(1px);filter:brightness(1.08)}
+
+  /* KPI mini */
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+  .kpi{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:12px 10px;text-align:center;animation:rise .5s ease both;
+  }
+  .kpi .v{font-size:22px;font-weight:800;line-height:1;font-family:Consolas,monospace}
+  .kpi .l{font-size:9.5px;color:var(--txt2);text-transform:uppercase;letter-spacing:.6px;margin-top:6px}
+
+  .section-title{
+    font-size:12px;text-transform:uppercase;letter-spacing:1.4px;color:var(--txt2);
+    margin:6px 2px 12px;display:flex;align-items:center;gap:8px;font-weight:700;
+  }
+  .section-title::before{content:"";width:4px;height:14px;border-radius:2px;background:var(--vw-cyan)}
+
+  /* CATEGORY CARDS */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .cat-card{
+    position:relative;border-radius:14px;padding:16px 14px;cursor:pointer;overflow:hidden;
+    background:var(--card);border:1px solid var(--line);
+    min-height:120px;display:flex;flex-direction:column;justify-content:space-between;
+    transition:transform .12s, border-color .15s, box-shadow .15s;
+    animation:rise .5s ease both;
+  }
+  .cat-card:active{transform:scale(.97)}
+  .cat-card .ic{
+    width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-size:24px;background:rgba(255,255,255,.05);
+  }
+  .cat-card .nm{font-size:15px;font-weight:700;margin-top:12px}
+  .cat-card .cnt{font-size:11px;color:var(--txt2);margin-top:3px}
+  .cat-card .stripe{position:absolute;left:0;top:0;bottom:0;width:4px}
+  .cat-card .glow{position:absolute;right:-30px;bottom:-30px;width:90px;height:90px;border-radius:50%;
+    opacity:.18;filter:blur(8px)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* CATEGORY DETAIL */
+  .back-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .back-bar .b{
+    width:40px;height:40px;border:none;border-radius:10px;background:rgba(255,255,255,.06);
+    color:var(--txt);font-size:20px;cursor:pointer;flex:0 0 auto;
+  }
+  .back-bar .b:active{background:rgba(255,255,255,.15)}
+  .back-bar .ti{font-size:18px;font-weight:800}
+  .back-bar .ds{font-size:11px;color:var(--txt2)}
+
+  .doc-list{display:flex;flex-direction:column;gap:11px}
+  .doc{
+    display:flex;align-items:center;gap:13px;padding:14px;border-radius:12px;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);
+    transition:transform .1s,border-color .15s;animation:rise .4s ease both;
+  }
+  .doc:active{transform:scale(.98)}
+  .doc .tic{
+    width:46px;height:46px;flex:0 0 auto;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:800;letter-spacing:.5px;color:#fff;
+  }
+  .tic.pdf{background:linear-gradient(135deg,#ff5252,#d50000)}
+  .tic.imagem{background:linear-gradient(135deg,#00b0ff,#0040c1)}
+  .tic.link{background:linear-gradient(135deg,#00c853,#009624)}
+  .doc .info{flex:1;min-width:0}
+  .doc .info .t{font-size:14.5px;font-weight:600;line-height:1.25}
+  .doc .info .m{font-size:11px;color:var(--txt2);margin-top:4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .pill{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:3px 7px;border-radius:20px}
+  .pill.novo{background:rgba(0,200,83,.16);color:#5fffa0;border:1px solid rgba(0,200,83,.35)}
+  .pill.obrigatório{background:rgba(213,0,0,.16);color:#ff8a8a;border:1px solid rgba(213,0,0,.4)}
+  .doc .arrow{color:var(--txt2);font-size:20px;flex:0 0 auto}
+
+  .empty{text-align:center;color:var(--txt2);padding:50px 20px;font-size:14px}
+  .empty .e{font-size:40px;margin-bottom:10px;opacity:.6}
+
+  /* SIDE MENU */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;opacity:0;pointer-events:none;
+    transition:opacity .2s;backdrop-filter:blur(2px)}
+  .overlay.show{opacity:1;pointer-events:auto}
+  .drawer{
+    position:fixed;top:0;left:0;bottom:0;width:80%;max-width:320px;z-index:50;
+    background:linear-gradient(180deg,#0c1430,#0a0f22);border-right:1px solid var(--line);
+    transform:translateX(-100%);transition:transform .25s cubic-bezier(.4,0,.2,1);
+    display:flex;flex-direction:column;padding-top:var(--safe-top);
+    box-shadow:8px 0 40px rgba(0,0,0,.5);
+  }
+  .drawer.show{transform:none}
+  .drawer-head{padding:22px 20px 16px;border-bottom:1px solid var(--line)}
+  .drawer-head .vw{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px}
+  .drawer-head .sl{font-size:10px;color:var(--txt2);margin-top:6px;letter-spacing:.5px}
+  .drawer-nav{flex:1;overflow-y:auto;padding:10px}
+  .nav-item{
+    display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:10px;cursor:pointer;
+    color:var(--txt);font-size:14.5px;font-weight:600;transition:background .12s;
+  }
+  .nav-item:active,.nav-item.active{background:rgba(0,176,255,.12)}
+  .nav-item .ni{width:24px;text-align:center;font-size:18px}
+  .nav-item .nb{margin-left:auto;font-size:11px;color:var(--txt2);font-weight:700;
+    background:rgba(255,255,255,.06);padding:2px 8px;border-radius:20px;min-width:24px;text-align:center}
+  .nav-sep{height:1px;background:var(--line);margin:8px 14px}
+  .drawer-foot{padding:14px 18px calc(16px + var(--safe-bottom));border-top:1px solid var(--line);
+    font-size:11px;color:var(--txt2)}
+
+  /* VIEWER MODAL */
+  .viewer{position:fixed;inset:0;z-index:60;background:#04060d;display:none;flex-direction:column}
+  .viewer.show{display:flex}
+  .viewer-bar{
+    display:flex;align-items:center;gap:10px;padding:calc(var(--safe-top) + 10px) 14px 10px;
+    background:rgba(0,30,80,.6);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  .viewer-bar .vt{flex:1;font-size:14px;font-weight:600;min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .viewer-body{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#04060d}
+  .viewer-body img{max-width:100%;max-height:100%;object-fit:contain;touch-action:pinch-zoom}
+  .viewer-body iframe{width:100%;height:100%;border:none;background:#fff}
+  .nav-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:none;border-radius:50%;
+    background:rgba(0,0,0,.5);color:#fff;font-size:24px;cursor:pointer;z-index:2;
+    display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)
+  }
+  .nav-arrow.prev{left:10px}.nav-arrow.next{right:10px}
+  .nav-arrow:disabled{opacity:0;pointer-events:none}
+  .viewer-foot{padding:14px;padding-bottom:calc(14px + var(--safe-bottom));text-align:center;
+    background:rgba(0,30,80,.4);border-top:1px solid var(--line)}
+  .open-btn{
+    display:inline-block;text-decoration:none;background:linear-gradient(135deg,var(--vw-cyan),var(--vw-blue2));
+    color:#fff;font-weight:700;font-size:14px;padding:12px 24px;border-radius:10px;
+  }
+  .pdf-fallback{padding:40px 24px;text-align:center;color:var(--txt2)}
+  .pdf-fallback .pi{font-size:54px;margin-bottom:16px}
+
+  /* CONFIG */
+  .cfg-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+  .cfg-card h3{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--vw-cyan);margin-bottom:10px}
+  .url-box{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:8px;padding:11px;
+    font-size:12px;font-family:Consolas,monospace;color:#9fe1ff;word-break:break-all;margin-bottom:10px}
+  .cfg-btn{width:100%;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;
+    cursor:pointer;color:#fff;margin-bottom:9px}
+  .cfg-btn.b1{background:linear-gradient(135deg,var(--vw-cyan),var(--vw-blue2))}
+  .cfg-btn.b2{background:rgba(255,255,255,.08);color:var(--txt)}
+  .cfg-btn:active{filter:brightness(1.1)}
+  .meta-row{display:flex;justify-content:space-between;font-size:12.5px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .meta-row:last-child{border:none}
+  .meta-row span:last-child{color:var(--txt2)}
+
+  /* TOAST */
+  .toast{
+    position:fixed;left:50%;bottom:calc(26px + var(--safe-bottom));transform:translateX(-50%) translateY(20px);
+    background:#0d1b3a;border:1px solid rgba(0,176,255,.4);color:var(--txt);
+    padding:12px 20px;border-radius:30px;font-size:13.5px;z-index:90;opacity:0;pointer-events:none;
+    transition:opacity .25s,transform .25s;box-shadow:0 8px 30px rgba(0,0,0,.5);max-width:88%;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="bg-fx"></div>
+
+<div id="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <button class="icon-btn" id="btnMenu" aria-label="Menu">☰</button>
+      <div class="brand">
+        <span class="vw"><span class="vw-logo">VW</span> FAHRWERK HUB</span>
+        <span class="slogan">Informação • Qualidade • Segurança • Evolução</span>
+      </div>
+      <button class="icon-btn" id="btnSearch" aria-label="Buscar">🔍</button>
+      <div class="clock">
+        <div class="h" id="clkH">--:--</div>
+        <div class="d" id="clkD">--</div>
+      </div>
+    </div>
+    <div class="searchwrap" id="searchWrap">
+      <input type="text" id="searchInput" placeholder="Buscar slide, PDF ou categoria..." autocomplete="off">
+    </div>
+  </header>
+
+  <main id="view"></main>
+</div>
+
+<!-- DRAWER -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="vw"><span class="vw-logo">VW</span> FAHRWERK DIGITAL HUB</div>
+    <div class="sl">Central digital de informação industrial</div>
+  </div>
+  <nav class="drawer-nav" id="drawerNav"></nav>
+  <div class="drawer-foot">
+    <div id="footVer">Versão —</div>
+    <div id="footUpd">Atualizado —</div>
+  </div>
+</aside>
+
+<!-- VIEWER -->
+<div class="viewer" id="viewer">
+  <div class="viewer-bar">
+    <button class="icon-btn" id="viewerClose">✕</button>
+    <div class="vt" id="viewerTitle"></div>
+  </div>
+  <div class="viewer-body" id="viewerBody">
+    <button class="nav-arrow prev" id="viewerPrev">‹</button>
+    <button class="nav-arrow next" id="viewerNext">›</button>
+  </div>
+  <div class="viewer-foot" id="viewerFoot"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ===== ESTADO CENTRAL ===== */
+var CHAVE = "fahrwerk_hub_v1";
+var state = {
+  view: "home",        // home | categoria | busca | config
+  categoriaId: null,
+  busca: "",
+  conteudo: null,
+  atualizadoEm: null,
+  viewer: { item: null, paginas: [], idx: 0 }
+};
+
+/* ===== UTIL ===== */
+function $(id){ return document.getElementById(id); }
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];}); }
+function fmtData(d){ if(!d)return ""; var p=String(d).slice(0,10).split("-"); if(p.length<3)return d; return p[2]+"/"+p[1]+"/"+p[0]; }
+
+var toastTimer=null;
+function toast(msg){
+  var t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer=setTimeout(function(){t.classList.remove("show");},2600);
+}
+
+/* ===== RELÓGIO ===== */
+function tick(){
+  var n=new Date();
+  var h=String(n.getHours()).padStart(2,"0"), m=String(n.getMinutes()).padStart(2,"0");
+  $("clkH").textContent=h+":"+m;
+  var dias=["DOM","SEG","TER","QUA","QUI","SEX","SÁB"];
+  $("clkD").textContent=dias[n.getDay()]+" "+String(n.getDate()).padStart(2,"0")+"/"+String(n.getMonth()+1).padStart(2,"0");
+}
+
+/* ===== CARREGAR CONTEÚDO ===== */
+function carregar(){
+  return fetch("conteudo.json?v="+Date.now(), {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+    .then(function(j){
+      state.conteudo=j;
+      state.atualizadoEm=j.atualizadoEm||null;
+      try{ localStorage.setItem(CHAVE, JSON.stringify(j)); }catch(e){}
+      return j;
+    })
+    .catch(function(err){
+      // fallback offline
+      try{
+        var cache=localStorage.getItem(CHAVE);
+        if(cache){ state.conteudo=JSON.parse(cache); toast("Sem conexão — exibindo última versão salva"); return state.conteudo; }
+      }catch(e){}
+      throw err;
+    });
+}
+
+/* ===== HELPERS DE DADOS ===== */
+function getCategoria(id){
+  if(!state.conteudo) return null;
+  var cs=state.conteudo.categorias||[];
+  for(var i=0;i<cs.length;i++){ if(cs[i].id===id) return cs[i]; }
+  return null;
+}
+function totalItens(){
+  var c=state.conteudo&&state.conteudo.categorias||[]; var t=0;
+  for(var i=0;i<c.length;i++){ t+=(c[i].itens||[]).length; }
+  return t;
+}
+function novosCount(){
+  var c=state.conteudo&&state.conteudo.categorias||[]; var t=0;
+  for(var i=0;i<c.length;i++){ var it=c[i].itens||[]; for(var j=0;j<it.length;j++){ if((it[j].tag||"").toLowerCase()==="novo")t++; } }
+  return t;
+}
+function buscar(termo){
+  var q=termo.trim().toLowerCase(); var res=[];
+  if(!q||!state.conteudo) return res;
+  var cs=state.conteudo.categorias||[];
+  for(var i=0;i<cs.length;i++){
+    var cat=cs[i], it=cat.itens||[];
+    for(var j=0;j<it.length;j++){
+      var item=it[j];
+      var alvo=(item.titulo+" "+cat.nome+" "+(item.tag||"")).toLowerCase();
+      if(alvo.indexOf(q)>=0) res.push({cat:cat, item:item});
+    }
+  }
+  return res;
+}
+
+/* ===== RENDER CENTRAL ===== */
+function render(){
+  var v=$("view");
+  if(!state.conteudo){ v.innerHTML='<div class="empty"><div class="e">⏳</div>Carregando conteúdo...</div>'; return; }
+
+  if(state.view==="home") return renderHome(v);
+  if(state.view==="categoria") return renderCategoria(v);
+  if(state.view==="busca") return renderBusca(v);
+  if(state.view==="config") return renderConfig(v);
+}
+
+function renderHome(v){
+  v.innerHTML="";
+  var cs=state.conteudo.categorias||[];
+
+  var hero=el("section","hero");
+  hero.innerHTML=
+    '<span class="badge"><span class="dot"></span> Sistema online</span>'+
+    '<h1>Bem-vindo ao <span>FAHRWERK</span> Digital Hub</h1>'+
+    '<p class="wel">Acesse slides, PDFs e procedimentos do setor direto pelo celular. '+
+    'Toque em uma categoria para começar.</p>'+
+    '<button class="cta" id="ctaInfo">Acessar Informações ↓</button>';
+  v.appendChild(hero);
+
+  var kpis=el("div","kpis");
+  var data=[
+    {v:cs.length,l:"Categorias"},
+    {v:totalItens(),l:"Documentos"},
+    {v:novosCount(),l:"Novos"}
+  ];
+  data.forEach(function(k,i){
+    var c=el("div","kpi"); c.style.animationDelay=(i*0.05)+"s";
+    c.innerHTML='<div class="v">'+k.v+'</div><div class="l">'+k.l+'</div>';
+    kpis.appendChild(c);
+  });
+  v.appendChild(kpis);
+
+  v.appendChild(el("div","section-title",null)).textContent="Categorias";
+
+  var grid=el("div","cards");
+  cs.forEach(function(cat,i){
+    var n=(cat.itens||[]).length;
+    var card=el("div","cat-card");
+    card.style.animationDelay=(0.05+i*0.04)+"s";
+    card.dataset.cat=cat.id;
+    card.innerHTML=
+      '<span class="stripe" style="background:'+esc(cat.cor||"#0040c1")+'"></span>'+
+      '<span class="glow" style="background:'+esc(cat.cor||"#0040c1")+'"></span>'+
+      '<div class="ic">'+esc(cat.icone||"📄")+'</div>'+
+      '<div>'+
+        '<div class="nm">'+esc(cat.nome)+'</div>'+
+        '<div class="cnt">'+n+(n===1?" documento":" documentos")+'</div>'+
+      '</div>';
+    grid.appendChild(card);
+  });
+  v.appendChild(grid);
+}
+
+function renderCategoria(v){
+  var cat=getCategoria(state.categoriaId);
+  v.innerHTML="";
+  if(!cat){ state.view="home"; return render(); }
+
+  var bar=el("div","back-bar");
+  bar.innerHTML=
+    '<button class="b" id="btnBack">←</button>'+
+    '<div><div class="ti">'+esc(cat.icone||"")+' '+esc(cat.nome)+'</div>'+
+    '<div class="ds">'+esc(cat.descricao||"")+'</div></div>';
+  v.appendChild(bar);
+
+  var itens=cat.itens||[];
+  if(!itens.length){
+    v.appendChild(el("div","empty",'<div class="e">📭</div>Nenhum documento nesta categoria ainda.'));
+    return;
+  }
+  var lista=el("div","doc-list");
+  itens.forEach(function(item,i){ lista.appendChild(docRow(cat,item,i)); });
+  v.appendChild(lista);
+}
+
+function renderBusca(v){
+  v.innerHTML="";
+  var res=buscar(state.busca);
+  v.appendChild(el("div","section-title",null)).textContent='Busca: "'+esc(state.busca)+'"';
+  if(!state.busca.trim()){
+    v.appendChild(el("div","empty",'<div class="e">🔍</div>Digite para buscar em todo o HUB.'));
+    return;
+  }
+  if(!res.length){
+    v.appendChild(el("div","empty",'<div class="e">🤷</div>Nada encontrado para "'+esc(state.busca)+'".'));
+    return;
+  }
+  var lista=el("div","doc-list");
+  res.forEach(function(r,i){
+    var row=docRow(r.cat,r.item,i,true);
+    lista.appendChild(row);
+  });
+  v.appendChild(lista);
+}
+
+function numPaginas(item){
+  if(Array.isArray(item.paginas)&&item.paginas.length) return item.paginas.length;
+  return 1;
+}
+function docRow(cat,item,i,showCat){
+  var tipo=(item.tipo||"imagem").toLowerCase();
+  var tlabel=tipo==="imagem"?"IMG":(tipo==="link"?"LINK":"PDF");
+  var row=el("div","doc"); row.style.animationDelay=(i*0.03)+"s";
+  row.dataset.cat=cat.id; row.dataset.item=item.id;
+  var tagHtml="";
+  var tg=(item.tag||"").toLowerCase();
+  if(tg) tagHtml='<span class="pill '+esc(tg)+'">'+esc(item.tag)+'</span>';
+  var meta='<span>'+fmtData(item.data)+'</span>';
+  var np=numPaginas(item);
+  if(np>1) meta+='<span>• 📄 '+np+' páginas</span>';
+  if(showCat) meta+='<span>• '+esc(cat.nome)+'</span>';
+  meta+=tagHtml;
+  row.innerHTML=
+    '<div class="tic '+tipo+'">'+tlabel+'</div>'+
+    '<div class="info"><div class="t">'+esc(item.titulo)+'</div><div class="m">'+meta+'</div></div>'+
+    '<div class="arrow">›</div>';
+  return row;
+}
+
+function renderConfig(v){
+  v.innerHTML="";
+  var bar=el("div","back-bar");
+  bar.innerHTML='<button class="b" id="btnBack">←</button><div><div class="ti">⚙️ Configuração</div>'+
+    '<div class="ds">Link, QR Code e TAG NFC do HUB</div></div>';
+  v.appendChild(bar);
+
+  var base=location.href.split("#")[0].split("?")[0];
+
+  var c1=el("div","cfg-card");
+  c1.innerHTML='<h3>🔗 Link do HUB</h3><div class="url-box" id="hubUrl">'+esc(base)+'</div>'+
+    '<button class="cfg-btn b1" id="btnCopy">📋 Copiar link</button>'+
+    '<button class="cfg-btn b2" id="btnNfc">📲 Gravar TAG NFC</button>';
+  v.appendChild(c1);
+
+  var c2=el("div","cfg-card");
+  var ver=(state.conteudo&&state.conteudo.versao)||"—";
+  c2.innerHTML='<h3>ℹ️ Informações</h3>'+
+    '<div class="meta-row"><span>Setor</span><span>'+esc((state.conteudo&&state.conteudo.setor)||"Fahrwerk")+'</span></div>'+
+    '<div class="meta-row"><span>Versão do conteúdo</span><span>'+esc(ver)+'</span></div>'+
+    '<div class="meta-row"><span>Categorias</span><span>'+(state.conteudo.categorias||[]).length+'</span></div>'+
+    '<div class="meta-row"><span>Documentos</span><span>'+totalItens()+'</span></div>'+
+    '<div class="meta-row"><span>Atualizado em</span><span>'+esc(fmtDataHora(state.atualizadoEm))+'</span></div>';
+  v.appendChild(c2);
+
+  var c3=el("div","cfg-card");
+  c3.innerHTML='<h3>🔄 Atualizar conteúdo</h3>'+
+    '<p style="font-size:12.5px;color:var(--txt2);margin-bottom:11px;line-height:1.5">'+
+    'O conteúdo é carregado do servidor. Toque abaixo para buscar a versão mais recente.</p>'+
+    '<button class="cfg-btn b1" id="btnReload">⬇️ Buscar versão mais recente</button>';
+  v.appendChild(c3);
+}
+
+function fmtDataHora(s){
+  if(!s) return "—";
+  try{ var d=new Date(s); if(isNaN(d)) return s;
+    return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear()+
+      " "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+  }catch(e){ return s; }
+}
+
+/* ===== DRAWER ===== */
+function renderDrawer(){
+  var nav=$("drawerNav"); nav.innerHTML="";
+  var home=el("div","nav-item"+(state.view==="home"?" active":"")); home.dataset.go="home";
+  home.innerHTML='<span class="ni">🏠</span><span>Início</span>';
+  nav.appendChild(home);
+  nav.appendChild(el("div","nav-sep"));
+
+  (state.conteudo&&state.conteudo.categorias||[]).forEach(function(cat){
+    var it=el("div","nav-item"+(state.view==="categoria"&&state.categoriaId===cat.id?" active":""));
+    it.dataset.cat=cat.id;
+    it.innerHTML='<span class="ni">'+esc(cat.icone||"📄")+'</span><span>'+esc(cat.nome)+'</span>'+
+      '<span class="nb">'+(cat.itens||[]).length+'</span>';
+    nav.appendChild(it);
+  });
+  nav.appendChild(el("div","nav-sep"));
+  var cfg=el("div","nav-item"+(state.view==="config"?" active":"")); cfg.dataset.go="config";
+  cfg.innerHTML='<span class="ni">⚙️</span><span>Configuração</span>';
+  nav.appendChild(cfg);
+
+  $("footVer").textContent="Versão "+((state.conteudo&&state.conteudo.versao)||"—");
+  $("footUpd").textContent="Atualizado "+fmtDataHora(state.atualizadoEm);
+}
+function openDrawer(){ renderDrawer(); $("drawer").classList.add("show"); $("overlay").classList.add("show"); }
+function closeDrawer(){ $("drawer").classList.remove("show"); $("overlay").classList.remove("show"); }
+
+/* ===== NAVEGAÇÃO ===== */
+function irHome(){ state.view="home"; closeDrawer(); fecharBusca(); render(); window.scrollTo(0,0); }
+function irCategoria(id){ state.view="categoria"; state.categoriaId=id; closeDrawer(); fecharBusca(); render(); window.scrollTo(0,0); }
+function irConfig(){ state.view="config"; closeDrawer(); fecharBusca(); render(); window.scrollTo(0,0); }
+
+/* ===== BUSCA ===== */
+function abrirBusca(){ $("searchWrap").classList.add("open"); setTimeout(function(){$("searchInput").focus();},80); }
+function fecharBusca(){ $("searchWrap").classList.remove("open"); $("searchInput").value=""; }
+function toggleBusca(){
+  if($("searchWrap").classList.contains("open")){ fecharBusca(); if(state.view==="busca"){state.view="home";render();} }
+  else abrirBusca();
+}
+
+/* ===== VIEWER ===== */
+function abrirItem(catId,itemId){
+  var cat=getCategoria(catId); if(!cat) return;
+  var itens=cat.itens||[]; var item=null;
+  for(var i=0;i<itens.length;i++){ if(itens[i].id===itemId){ item=itens[i]; break; } }
+  if(!item) return;
+  state.viewer.item=item; state.viewer.idx=0;
+  var tipo=(item.tipo||"imagem").toLowerCase();
+  if(tipo==="imagem"){
+    state.viewer.paginas = (Array.isArray(item.paginas)&&item.paginas.length) ? item.paginas.slice() : [item.arquivo];
+  } else {
+    state.viewer.paginas = [item.arquivo]; // pdf / link = único
+  }
+  mostrarItem();
+  $("viewer").classList.add("show");
+}
+function mostrarItem(){
+  var item=state.viewer.item; if(!item) return;
+  var tipo=(item.tipo||"imagem").toLowerCase();
+  var total=state.viewer.paginas.length;
+  var atual=state.viewer.paginas[state.viewer.idx];
+  $("viewerTitle").textContent = item.titulo + (total>1 ? "  ·  "+(state.viewer.idx+1)+"/"+total : "");
+  var body=$("viewerBody");
+  var olds=body.querySelectorAll(".media"); olds.forEach(function(n){n.remove();});
+  var foot=$("viewerFoot");
+
+  if(tipo==="link"){
+    abrirExterno(atual);
+    var wrap=el("div","media pdf-fallback");
+    wrap.innerHTML='<div class="pi">🔗</div><div>Abrindo link externo...</div>';
+    body.appendChild(wrap);
+    foot.innerHTML='<a class="open-btn" href="'+esc(atual)+'" target="_blank" rel="noopener">Abrir link ↗</a>';
+  } else if(tipo==="pdf"){
+    var ifr=el("iframe","media"); ifr.src=atual+"#view=FitH"; ifr.title=item.titulo;
+    body.appendChild(ifr);
+    foot.innerHTML='<a class="open-btn" href="'+esc(atual)+'" target="_blank" rel="noopener">Abrir PDF em tela cheia ⤢</a>';
+  } else {
+    var img=el("img","media"); img.src=atual; img.alt=item.titulo;
+    img.onerror=function(){ mediaErro(body,"🖼️","Imagem não encontrada",atual); };
+    body.appendChild(img);
+    var pg = total>1 ? '<div style="color:var(--txt2);font-size:13px;margin-bottom:9px">Página '+(state.viewer.idx+1)+' de '+total+' — deslize para navegar</div>' : '';
+    foot.innerHTML = pg + '<a class="open-btn" href="'+esc(atual)+'" target="_blank" rel="noopener">Abrir em tela cheia ⤢</a>';
+  }
+
+  $("viewerPrev").disabled = state.viewer.idx<=0 || total<=1;
+  $("viewerNext").disabled = state.viewer.idx>=total-1 || total<=1;
+}
+function mediaErro(body,emoji,msg,arq){
+  var olds=body.querySelectorAll(".media"); olds.forEach(function(n){n.remove();});
+  var wrap=el("div","media pdf-fallback");
+  wrap.innerHTML='<div class="pi">'+emoji+'</div><div>'+esc(msg)+'</div>'+
+    '<div style="font-size:11px;margin-top:8px;font-family:monospace;color:#5d6b94">'+esc(arq)+'</div>';
+  body.appendChild(wrap);
+}
+function abrirExterno(url){ try{ window.open(url,"_blank","noopener"); }catch(e){} }
+function fecharViewer(){ $("viewer").classList.remove("show");
+  var body=$("viewerBody"); var olds=body.querySelectorAll(".media"); olds.forEach(function(n){n.remove();}); }
+function viewerNav(d){
+  var ni=state.viewer.idx+d;
+  if(ni<0||ni>=state.viewer.paginas.length) return;
+  state.viewer.idx=ni; mostrarItem();
+}
+
+/* swipe no viewer (imagens) */
+var touchX=null;
+function bindSwipe(){
+  var body=$("viewerBody");
+  body.addEventListener("touchstart",function(e){ if(e.touches.length===1) touchX=e.touches[0].clientX; },{passive:true});
+  body.addEventListener("touchend",function(e){
+    if(touchX===null) return;
+    var dx=e.changedTouches[0].clientX-touchX; touchX=null;
+    var item=state.viewer.item;
+    if(!item||(item.tipo||"imagem").toLowerCase()!=="imagem") return; // só imagens (PDF usa scroll do iframe)
+    if(Math.abs(dx)>60){ viewerNav(dx<0?1:-1); }
+  },{passive:true});
+}
+
+/* ===== NFC (gravar TAG) ===== */
+function gravarNFC(url){
+  if(!("NDEFReader" in window)){ toast("NFC não suportado (use Chrome no Android)"); return; }
+  try{
+    var ndef=new NDEFReader();
+    toast("Aproxime a TAG NFC do celular...");
+    ndef.write({records:[{recordType:"url",data:url}]})
+      .then(function(){ toast("✅ TAG NFC gravada com sucesso!"); })
+      .catch(function(e){ toast("Erro ao gravar: "+e.message); });
+  }catch(e){ toast("Erro NFC: "+e.message); }
+}
+
+/* ===== COPIAR ===== */
+function copiar(txt){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){toast("📋 Link copiado!");}).catch(function(){fallbackCopy(txt);});
+  } else fallbackCopy(txt);
+}
+function fallbackCopy(txt){
+  var ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); toast("📋 Link copiado!"); }catch(e){ toast("Copie manualmente"); }
+  document.body.removeChild(ta);
+}
+
+/* ===== EVENTOS (sem onclick inline - iOS Safari) ===== */
+function bindEventos(){
+  $("btnMenu").addEventListener("click", openDrawer);
+  $("overlay").addEventListener("click", closeDrawer);
+  $("btnSearch").addEventListener("click", toggleBusca);
+
+  $("searchInput").addEventListener("input", function(e){
+    state.busca=e.target.value;
+    state.view = state.busca.trim()? "busca":"home";
+    render(); window.scrollTo(0,0);
+  });
+
+  // delegação de cliques no conteúdo
+  $("view").addEventListener("click", function(e){
+    var card=e.target.closest(".cat-card");
+    if(card){ irCategoria(card.dataset.cat); return; }
+    var doc=e.target.closest(".doc");
+    if(doc){ abrirItem(doc.dataset.cat, doc.dataset.item); return; }
+    var back=e.target.closest("#btnBack");
+    if(back){ irHome(); return; }
+    var cta=e.target.closest("#ctaInfo");
+    if(cta){ var k=document.querySelector(".cards"); if(k) k.scrollIntoView({behavior:"smooth"}); return; }
+    var copy=e.target.closest("#btnCopy");
+    if(copy){ copiar(location.href.split("#")[0].split("?")[0]); return; }
+    var nfc=e.target.closest("#btnNfc");
+    if(nfc){ gravarNFC(location.href.split("#")[0].split("?")[0]); return; }
+    var rel=e.target.closest("#btnReload");
+    if(rel){ carregar().then(function(){toast("✅ Conteúdo atualizado!"); render(); renderDrawer();}).catch(function(){toast("Falha ao atualizar");}); return; }
+  });
+
+  // delegação no drawer
+  $("drawerNav").addEventListener("click", function(e){
+    var item=e.target.closest(".nav-item"); if(!item) return;
+    if(item.dataset.go==="home") return irHome();
+    if(item.dataset.go==="config") return irConfig();
+    if(item.dataset.cat) return irCategoria(item.dataset.cat);
+  });
+
+  // viewer
+  $("viewerClose").addEventListener("click", fecharViewer);
+  $("viewerPrev").addEventListener("click", function(){ viewerNav(-1); });
+  $("viewerNext").addEventListener("click", function(){ viewerNav(1); });
+  bindSwipe();
+
+  // botão voltar do Android fecha viewer/drawer
+  window.addEventListener("keydown", function(e){ if(e.key==="Escape"){ fecharViewer(); closeDrawer(); } });
+}
+
+/* ===== INIT ===== */
+function init(){
+  tick(); setInterval(tick,1000*20);
+  bindEventos();
+  render();
+  carregar().then(function(){ render(); renderDrawer(); })
+    .catch(function(){
+      $("view").innerHTML='<div class="empty"><div class="e">⚠️</div>'+
+        'Não foi possível carregar o conteúdo.<br><small>Verifique o arquivo conteudo.json no servidor.</small></div>';
+    });
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", init);
+else init();
+</script>
+</body>
+</html>
