@@ -1,13 +1,10 @@
 {
-  "versao": "1.3.0",
-  "atualizadoEm": "2026-05-31T01:30:00",
+  "versao": "1.4.0",
+  "atualizadoEm": "2026-05-31T10:30:00",
   "setor": "Fahrwerk",
   "categorias": [
     {
-      "id": "seguranca",
-      "nome": "Segurança",
-      "icone": "🦺",
-      "cor": "#d50000",
+      "id": "seguranca", "nome": "Segurança", "icone": "🦺", "cor": "#d50000",
       "descricao": "EPIs, alertas e procedimentos de segurança do setor",
       "itens": [
         { "id": "seg-01", "titulo": "Proteção das Mãos — Risco Mecânico", "tipo": "imagem", "data": "2026-05-31", "tag": "obrigatório",
@@ -15,10 +12,7 @@
       ]
     },
     {
-      "id": "qualidade",
-      "nome": "Qualidade",
-      "icone": "🔍",
-      "cor": "#0040c1",
+      "id": "qualidade", "nome": "Qualidade", "icone": "🔍", "cor": "#0040c1",
       "descricao": "Padrões, defeitos críticos e controle de qualidade",
       "itens": [
         { "id": "qua-01", "titulo": "O Efeito Borboleta da Qualidade", "tipo": "imagem", "data": "2026-05-31", "tag": "novo",
@@ -30,6 +24,13 @@
     { "id": "volkswagen", "nome": "Cultura Volkswagen", "icone": "🚗", "cor": "#001e50", "descricao": "Valores, princípios e cultura da fábrica", "itens": [] },
     { "id": "inovacao", "nome": "Inovação", "icone": "💡", "cor": "#00c853", "descricao": "Ideias, projetos e melhorias do setor", "itens": [] },
     { "id": "auditorias", "nome": "Auditorias", "icone": "📋", "cor": "#7c4dff", "descricao": "Preparação VDA e checklists de auditoria", "itens": [] },
-    { "id": "procedimentos", "nome": "Procedimentos", "icone": "📑", "cor": "#00bfa5", "descricao": "Documentos técnicos e procedimentos padrão", "itens": [] }
+    {
+      "id": "procedimentos", "nome": "Procedimentos", "icone": "📑", "cor": "#00bfa5",
+      "descricao": "Documentos técnicos e procedimentos padrão",
+      "itens": [
+        { "id": "pro-01", "titulo": "POP: Sequenciamento do Tanque de Combustível", "tipo": "imagem", "data": "2026-05-31", "tag": "novo",
+          "paginas": ["tanque-1.jpg","tanque-2.jpg","tanque-3.jpg","tanque-4.jpg","tanque-5.jpg","tanque-6.jpg","tanque-7.jpg","tanque-8.jpg","tanque-9.jpg"] }
+      ]
+    }
   ]
 }
