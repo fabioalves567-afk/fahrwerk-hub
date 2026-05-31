@@ -1,6 +1,6 @@
 {
-  "versao": "1.6.0",
-  "atualizadoEm": "2026-05-31T11:30:00",
+  "versao": "1.7.0",
+  "atualizadoEm": "2026-05-31T12:00:00",
   "setor": "Fahrwerk",
   "categorias": [
     {
@@ -19,7 +19,14 @@
           "paginas": ["qual-1.jpg","qual-2.jpg","qual-3.jpg","qual-4.jpg","qual-5.jpg","qual-6.jpg","qual-7.jpg","qual-8.jpg","qual-9.jpg","qual-10.jpg","qual-11.jpg","qual-12.jpg"] }
       ]
     },
-    { "id": "operacoes", "nome": "Operações", "icone": "⚙️", "cor": "#00b0ff", "descricao": "Padrões operacionais e sequências de montagem", "itens": [] },
+    {
+      "id": "operacoes", "nome": "Operações", "icone": "⚙️", "cor": "#00b0ff",
+      "descricao": "Padrões operacionais e sequências de montagem",
+      "itens": [
+        { "id": "ope-01", "titulo": "Fahrwerk: Engenharia de Precisão Automotiva", "tipo": "imagem", "data": "2026-05-31", "tag": "novo",
+          "paginas": ["ops-1.jpg","ops-2.jpg","ops-3.jpg","ops-4.jpg","ops-5.jpg","ops-6.jpg","ops-7.jpg","ops-8.jpg","ops-9.jpg","ops-10.jpg","ops-11.jpg","ops-12.jpg","ops-13.jpg","ops-14.jpg","ops-15.jpg"] }
+      ]
+    },
     { "id": "informativos", "nome": "Informativos", "icone": "📢", "cor": "#ffd600", "descricao": "Comunicados, metas e avisos do setor", "itens": [] },
     {
       "id": "volkswagen", "nome": "Cultura Volkswagen", "icone": "🚗", "cor": "#001e50",
