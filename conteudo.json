@@ -1,6 +1,6 @@
 {
-  "versao": "1.1.0",
-  "atualizadoEm": "2026-05-30T10:00:00",
+  "versao": "1.2.0",
+  "atualizadoEm": "2026-05-31T00:30:00",
   "setor": "Fahrwerk",
   "categorias": [
     {
@@ -10,12 +10,18 @@
       "cor": "#d50000",
       "descricao": "EPIs, alertas e procedimentos de segurança do setor",
       "itens": [
-        { "id": "seg-01", "titulo": "Uso correto de EPIs", "tipo": "imagem", "data": "2026-05-20", "tag": "obrigatório",
-          "paginas": ["slides/seguranca/epis-1.jpg", "slides/seguranca/epis-2.jpg", "slides/seguranca/epis-3.jpg"] },
-        { "id": "seg-02", "titulo": "Mapa de riscos do setor", "tipo": "imagem", "data": "2026-05-18", "tag": "",
-          "arquivo": "slides/seguranca/mapa-riscos.jpg" },
-        { "id": "seg-03", "titulo": "Procedimento de bloqueio (LOTO)", "tipo": "imagem", "data": "2026-05-15", "tag": "novo",
-          "paginas": ["slides/seguranca/loto-1.jpg", "slides/seguranca/loto-2.jpg"] }
+        { "id": "seg-01", "titulo": "Proteção das Mãos — Risco Mecânico", "tipo": "imagem", "data": "2026-05-31", "tag": "obrigatório",
+          "paginas": [
+            "slides/seguranca/maos-1.jpg",
+            "slides/seguranca/maos-2.jpg",
+            "slides/seguranca/maos-3.jpg",
+            "slides/seguranca/maos-4.jpg",
+            "slides/seguranca/maos-5.jpg",
+            "slides/seguranca/maos-6.jpg",
+            "slides/seguranca/maos-7.jpg",
+            "slides/seguranca/maos-8.jpg",
+            "slides/seguranca/maos-9.jpg"
+          ] }
       ]
     },
     {
@@ -24,12 +30,7 @@
       "icone": "🔍",
       "cor": "#0040c1",
       "descricao": "Padrões, defeitos críticos e controle de qualidade",
-      "itens": [
-        { "id": "qua-01", "titulo": "Defeitos críticos - Suspensão", "tipo": "imagem", "data": "2026-05-22", "tag": "",
-          "paginas": ["slides/qualidade/defeitos-1.jpg", "slides/qualidade/defeitos-2.jpg", "slides/qualidade/defeitos-3.jpg", "slides/qualidade/defeitos-4.jpg"] },
-        { "id": "qua-02", "titulo": "Padrão de aperto / Torque", "tipo": "imagem", "data": "2026-05-10", "tag": "",
-          "arquivo": "slides/qualidade/torque.jpg" }
-      ]
+      "itens": []
     },
     {
       "id": "operacoes",
@@ -37,10 +38,7 @@
       "icone": "⚙️",
       "cor": "#00b0ff",
       "descricao": "Padrões operacionais e sequências de montagem",
-      "itens": [
-        { "id": "ope-01", "titulo": "Folha de operação padrão", "tipo": "imagem", "data": "2026-05-21", "tag": "",
-          "paginas": ["slides/operacoes/folha-1.jpg", "slides/operacoes/folha-2.jpg", "slides/operacoes/folha-3.jpg", "slides/operacoes/folha-4.jpg", "slides/operacoes/folha-5.jpg"] }
-      ]
+      "itens": []
     },
     {
       "id": "informativos",
@@ -48,10 +46,7 @@
       "icone": "📢",
       "cor": "#ffd600",
       "descricao": "Comunicados, metas e avisos do setor",
-      "itens": [
-        { "id": "inf-01", "titulo": "Meta do mês - 2º turno", "tipo": "imagem", "data": "2026-05-28", "tag": "novo",
-          "arquivo": "slides/informativos/meta-mes.jpg" }
-      ]
+      "itens": []
     },
     {
       "id": "volkswagen",
@@ -59,10 +54,7 @@
       "icone": "🚗",
       "cor": "#001e50",
       "descricao": "Valores, princípios e cultura da fábrica",
-      "itens": [
-        { "id": "vw-01", "titulo": "Princípios Volkswagen", "tipo": "imagem", "data": "2026-04-30", "tag": "",
-          "paginas": ["slides/volkswagen/principios-1.jpg", "slides/volkswagen/principios-2.jpg"] }
-      ]
+      "itens": []
     },
     {
       "id": "inovacao",
@@ -70,10 +62,7 @@
       "icone": "💡",
       "cor": "#00c853",
       "descricao": "Ideias, projetos e melhorias do setor",
-      "itens": [
-        { "id": "ino-01", "titulo": "Fábrica de Ideias - como participar", "tipo": "imagem", "data": "2026-05-25", "tag": "",
-          "arquivo": "slides/inovacao/fabrica-ideias.jpg" }
-      ]
+      "itens": []
     },
     {
       "id": "auditorias",
@@ -81,10 +70,7 @@
       "icone": "📋",
       "cor": "#7c4dff",
       "descricao": "Preparação VDA e checklists de auditoria",
-      "itens": [
-        { "id": "aud-01", "titulo": "Checklist VDA - preparação", "tipo": "imagem", "data": "2026-05-12", "tag": "",
-          "paginas": ["slides/auditorias/vda-1.jpg", "slides/auditorias/vda-2.jpg", "slides/auditorias/vda-3.jpg"] }
-      ]
+      "itens": []
     },
     {
       "id": "procedimentos",
@@ -92,10 +78,7 @@
       "icone": "📑",
       "cor": "#00bfa5",
       "descricao": "Documentos técnicos e procedimentos padrão",
-      "itens": [
-        { "id": "pro-01", "titulo": "Procedimento de retrabalho na linha", "tipo": "imagem", "data": "2026-05-17", "tag": "",
-          "paginas": ["slides/procedimentos/retrabalho-1.jpg", "slides/procedimentos/retrabalho-2.jpg"] }
-      ]
+      "itens": []
     }
   ]
 }
