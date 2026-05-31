@@ -136,6 +136,21 @@
   .hero .cta:active{transform:translateY(1px);filter:brightness(1.08)}
 
   /* KPI mini */
+  .destaque-card{
+    display:flex;align-items:center;gap:14px;margin-bottom:18px;padding:16px 16px;
+    border-radius:14px;cursor:pointer;
+    background:linear-gradient(135deg, rgba(255,214,0,.16), rgba(0,64,193,.20));
+    border:1px solid rgba(255,214,0,.5);
+    box-shadow:0 6px 26px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.03);
+    animation:rise .5s ease both;transition:transform .12s,filter .15s;
+  }
+  .destaque-card:active{transform:scale(.985);filter:brightness(1.06)}
+  .destaque-card .dq-pin{font-size:26px;flex:0 0 auto;line-height:1}
+  .destaque-card .dq-body{flex:1;min-width:0}
+  .destaque-card .dq-label{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#ffd600}
+  .destaque-card .dq-title{font-size:16px;font-weight:800;margin-top:3px;line-height:1.15}
+  .destaque-card .dq-sub{font-size:11.5px;color:var(--txt2);margin-top:4px}
+  .destaque-card .dq-go{flex:0 0 auto;font-weight:800;color:#ffd600;font-size:14px}
   .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
   .kpi{
     background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
@@ -402,6 +417,11 @@ function getCategoria(id){
   for(var i=0;i<cs.length;i++){ if(cs[i].id===id) return cs[i]; }
   return null;
 }
+function getItemById(itemId){
+  var cs=state.conteudo&&state.conteudo.categorias||[];
+  for(var i=0;i<cs.length;i++){ var it=cs[i].itens||[]; for(var j=0;j<it.length;j++){ if(it[j].id===itemId) return {cat:cs[i], item:it[j]}; } }
+  return null;
+}
 function totalItens(){
   var c=state.conteudo&&state.conteudo.categorias||[]; var t=0;
   for(var i=0;i<c.length;i++){ t+=(c[i].itens||[]).length; }
@@ -450,6 +470,28 @@ function renderHome(v){
     'Toque em uma categoria para começar.</p>'+
     '<button class="cta" id="ctaInfo">Acessar Informações ↓</button>';
   v.appendChild(hero);
+
+  // Card de destaque "Comece por aqui"
+  var dq = state.conteudo.destaque;
+  if(dq){
+    var dqId = (typeof dq === "string") ? dq : dq.item;
+    var found = getItemById(dqId);
+    if(found){
+      var np = numPaginas(found.item);
+      var dcard = el("div","destaque-card");
+      dcard.dataset.cat = found.cat.id;
+      dcard.dataset.item = found.item.id;
+      dcard.innerHTML =
+        '<div class="dq-pin">📌</div>'+
+        '<div class="dq-body">'+
+          '<div class="dq-label">Comece por aqui</div>'+
+          '<div class="dq-title">'+esc(found.item.titulo)+'</div>'+
+          '<div class="dq-sub">'+esc(found.cat.nome)+' · '+np+' páginas</div>'+
+        '</div>'+
+        '<div class="dq-go">Ver ›</div>';
+      v.appendChild(dcard);
+    }
+  }
 
   var kpis=el("div","kpis");
   var data=[
@@ -749,6 +791,8 @@ function bindEventos(){
   $("view").addEventListener("click", function(e){
     var card=e.target.closest(".cat-card");
     if(card){ irCategoria(card.dataset.cat); return; }
+    var dqc=e.target.closest(".destaque-card");
+    if(dqc){ abrirItem(dqc.dataset.cat, dqc.dataset.item); return; }
     var doc=e.target.closest(".doc");
     if(doc){ abrirItem(doc.dataset.cat, doc.dataset.item); return; }
     var back=e.target.closest("#btnBack");
