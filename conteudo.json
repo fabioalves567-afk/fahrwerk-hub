@@ -1,6 +1,6 @@
 {
-  "versao": "1.8.0",
-  "atualizadoEm": "2026-05-31T12:30:00",
+  "versao": "1.9.0",
+  "atualizadoEm": "2026-05-31T20:55:00",
   "setor": "Fahrwerk",
   "destaque": {
     "categoria": "operacoes",
@@ -168,6 +168,25 @@
             "vda-9.jpg",
             "vda-10.jpg",
             "vda-11.jpg"
+          ]
+        },
+        {
+          "id": "aud-02",
+          "titulo": "A Engenharia da Excelência Operacional",
+          "tipo": "imagem",
+          "data": "2026-05-31",
+          "tag": "novo",
+          "paginas": [
+            "excel-1.jpg",
+            "excel-2.jpg",
+            "excel-3.jpg",
+            "excel-4.jpg",
+            "excel-5.jpg",
+            "excel-6.jpg",
+            "excel-7.jpg",
+            "excel-8.jpg",
+            "excel-9.jpg",
+            "excel-10.jpg"
           ]
         }
       ]

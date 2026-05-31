@@ -250,17 +250,19 @@
     font-size:11px;color:var(--txt2)}
 
   /* VIEWER MODAL */
-  .viewer{position:fixed;inset:0;z-index:60;background:#04060d;display:none;flex-direction:column}
-  .viewer.show{display:flex}
+  .viewer{position:fixed;inset:0;z-index:60;background:#04060d;display:none}
+  .viewer.show{display:block}
+  /* corpo ocupa a TELA TODA; barra e rodapé flutuam por cima (translúcidos) */
+  .viewer-body{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#04060d}
+  .viewer-body img{width:100%;height:100%;object-fit:contain;touch-action:pinch-zoom}
+  .viewer-body iframe{width:100%;height:100%;border:none;background:#fff}
   .viewer-bar{
+    position:absolute;top:0;left:0;right:0;z-index:6;
     display:flex;align-items:center;gap:10px;padding:calc(var(--safe-top) + 10px) 14px 10px;
-    background:rgba(0,30,80,.6);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+    background:rgba(0,30,80,.55);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
   }
   .viewer-bar .vt{flex:1;font-size:14px;font-weight:600;min-width:0;overflow:hidden;
     text-overflow:ellipsis;white-space:nowrap}
-  .viewer-body{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#04060d}
-  .viewer-body img{max-width:100%;max-height:100%;object-fit:contain;touch-action:pinch-zoom}
-  .viewer-body iframe{width:100%;height:100%;border:none;background:#fff}
   .nav-arrow{
     position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border:1px solid rgba(255,255,255,.25);border-radius:50%;
     background:rgba(0,0,0,.55);color:#fff;font-size:26px;cursor:pointer;z-index:2;
@@ -268,8 +270,9 @@
   }
   .nav-arrow.prev{left:12px}.nav-arrow.next{right:12px}
   .nav-arrow:disabled{opacity:0;pointer-events:none}
-  .viewer-foot{padding:14px;padding-bottom:calc(14px + var(--safe-bottom));text-align:center;
-    background:rgba(0,30,80,.4);border-top:1px solid var(--line)}
+  .viewer-foot{position:absolute;left:0;right:0;bottom:0;z-index:6;
+    padding:12px 14px;padding-bottom:calc(12px + var(--safe-bottom));text-align:center;
+    background:rgba(0,30,80,.5);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
   .open-btn{
     display:inline-block;text-decoration:none;border:none;cursor:pointer;
     background:linear-gradient(135deg,var(--vw-cyan),var(--vw-blue2));
@@ -278,7 +281,25 @@
   .open-btn:active{filter:brightness(1.1)}
   /* fallback de tela cheia (navegadores sem Fullscreen API, ex. iPhone) */
   .viewer.maximizado .viewer-bar{display:none}
-  .viewer.maximizado .viewer-foot div{display:none}
+  .viewer.maximizado .viewer-foot{display:none}
+  .viewer.maximizado .rotate-hint{display:none}
+  /* ✕ de saída sempre acessível no modo maximizado (iOS, sem Fullscreen API) */
+  .viewer-exit{display:none}
+  .viewer.maximizado .viewer-exit{display:flex;align-items:center;justify-content:center;
+    position:absolute;top:calc(var(--safe-top) + 8px);right:12px;z-index:8;width:40px;height:40px;
+    border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.55);color:#fff;
+    font-size:20px;cursor:pointer;backdrop-filter:blur(4px)}
+  /* aviso para virar o celular — aparece só em retrato e some ao girar */
+  .rotate-hint{display:none}
+  @media (orientation:portrait){
+    .viewer.show .rotate-hint{display:flex;align-items:center;gap:7px;
+      position:absolute;left:50%;top:calc(var(--safe-top) + 62px);transform:translateX(-50%);z-index:7;
+      background:rgba(0,30,80,.88);color:#fff;font-size:13px;font-weight:600;line-height:1.2;
+      padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.25);
+      backdrop-filter:blur(6px);pointer-events:none;white-space:nowrap;max-width:92vw;
+      box-shadow:0 6px 20px rgba(0,0,0,.45);animation:rhpulse 2.4s ease-in-out infinite}
+  }
+  @keyframes rhpulse{0%,100%{opacity:1}50%{opacity:.5}}
   .pdf-fallback{padding:40px 24px;text-align:center;color:var(--txt2)}
   .pdf-fallback .pi{font-size:54px;margin-bottom:16px}
 
@@ -351,6 +372,8 @@
     <button class="icon-btn" id="viewerClose">✕</button>
     <div class="vt" id="viewerTitle"></div>
   </div>
+  <div class="rotate-hint" id="rotateHint">📱 ↻ Vire o celular para visualizar melhor</div>
+  <button class="viewer-exit" id="viewerExit">✕</button>
   <div class="viewer-body" id="viewerBody">
     <button class="nav-arrow prev" id="viewerPrev">‹</button>
     <button class="nav-arrow next" id="viewerNext">›</button>
@@ -842,6 +865,7 @@ function bindEventos(){
 
   // viewer
   $("viewerClose").addEventListener("click", fecharViewer);
+  $("viewerExit").addEventListener("click", fecharViewer);
   $("viewerPrev").addEventListener("click", function(){ viewerNav(-1); });
   $("viewerNext").addEventListener("click", function(){ viewerNav(1); });
   $("viewerFoot").addEventListener("click", function(e){
