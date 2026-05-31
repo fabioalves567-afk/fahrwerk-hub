@@ -262,18 +262,23 @@
   .viewer-body img{max-width:100%;max-height:100%;object-fit:contain;touch-action:pinch-zoom}
   .viewer-body iframe{width:100%;height:100%;border:none;background:#fff}
   .nav-arrow{
-    position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:none;border-radius:50%;
-    background:rgba(0,0,0,.5);color:#fff;font-size:24px;cursor:pointer;z-index:2;
+    position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border:1px solid rgba(255,255,255,.25);border-radius:50%;
+    background:rgba(0,0,0,.55);color:#fff;font-size:26px;cursor:pointer;z-index:2;
     display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)
   }
-  .nav-arrow.prev{left:10px}.nav-arrow.next{right:10px}
+  .nav-arrow.prev{left:12px}.nav-arrow.next{right:12px}
   .nav-arrow:disabled{opacity:0;pointer-events:none}
   .viewer-foot{padding:14px;padding-bottom:calc(14px + var(--safe-bottom));text-align:center;
     background:rgba(0,30,80,.4);border-top:1px solid var(--line)}
   .open-btn{
-    display:inline-block;text-decoration:none;background:linear-gradient(135deg,var(--vw-cyan),var(--vw-blue2));
+    display:inline-block;text-decoration:none;border:none;cursor:pointer;
+    background:linear-gradient(135deg,var(--vw-cyan),var(--vw-blue2));
     color:#fff;font-weight:700;font-size:14px;padding:12px 24px;border-radius:10px;
   }
+  .open-btn:active{filter:brightness(1.1)}
+  /* fallback de tela cheia (navegadores sem Fullscreen API, ex. iPhone) */
+  .viewer.maximizado .viewer-bar{display:none}
+  .viewer.maximizado .viewer-foot div{display:none}
   .pdf-fallback{padding:40px 24px;text-align:center;color:var(--txt2)}
   .pdf-fallback .pi{font-size:54px;margin-bottom:16px}
 
@@ -713,8 +718,8 @@ function mostrarItem(){
     var img=el("img","media"); img.src=atual; img.alt=item.titulo;
     img.onerror=function(){ mediaErro(body,"🖼️","Imagem não encontrada",atual); };
     body.appendChild(img);
-    var pg = total>1 ? '<div style="color:var(--txt2);font-size:13px;margin-bottom:9px">Página '+(state.viewer.idx+1)+' de '+total+' — deslize para navegar</div>' : '';
-    foot.innerHTML = pg + '<a class="open-btn" href="'+esc(atual)+'" target="_blank" rel="noopener">Abrir em tela cheia ⤢</a>';
+    var pg = total>1 ? '<div style="color:var(--txt2);font-size:13px;margin-bottom:9px">Página '+(state.viewer.idx+1)+' de '+total+' — deslize ou use as setas</div>' : '';
+    foot.innerHTML = pg + '<button class="open-btn" id="btnFull">⤢ Tela cheia</button>';
   }
 
   $("viewerPrev").disabled = state.viewer.idx<=0 || total<=1;
@@ -728,8 +733,28 @@ function mediaErro(body,emoji,msg,arq){
   body.appendChild(wrap);
 }
 function abrirExterno(url){ try{ window.open(url,"_blank","noopener"); }catch(e){} }
-function fecharViewer(){ $("viewer").classList.remove("show");
-  var body=$("viewerBody"); var olds=body.querySelectorAll(".media"); olds.forEach(function(n){n.remove();}); }
+function emFullscreen(){ return document.fullscreenElement || document.webkitFullscreenElement || $("viewer").classList.contains("maximizado"); }
+function toggleFullscreen(){
+  var vw=$("viewer");
+  if(document.fullscreenElement || document.webkitFullscreenElement){
+    var exit=document.exitFullscreen||document.webkitExitFullscreen;
+    if(exit) try{ exit.call(document); }catch(e){}
+    vw.classList.remove("maximizado");
+    return;
+  }
+  if(vw.classList.contains("maximizado")){ vw.classList.remove("maximizado"); return; }
+  var req=vw.requestFullscreen||vw.webkitRequestFullscreen;
+  if(req){ try{ req.call(vw); }catch(e){ vw.classList.add("maximizado"); } }
+  else { vw.classList.add("maximizado"); } // fallback (iOS): maximiza ocultando a barra
+}
+function fecharViewer(){
+  if(document.fullscreenElement || document.webkitFullscreenElement){
+    var exit=document.exitFullscreen||document.webkitExitFullscreen;
+    if(exit) try{ exit.call(document); }catch(e){}
+  }
+  var vw=$("viewer"); vw.classList.remove("show"); vw.classList.remove("maximizado");
+  var body=$("viewerBody"); var olds=body.querySelectorAll(".media"); olds.forEach(function(n){n.remove();});
+}
 function viewerNav(d){
   var ni=state.viewer.idx+d;
   if(ni<0||ni>=state.viewer.paginas.length) return;
@@ -819,6 +844,16 @@ function bindEventos(){
   $("viewerClose").addEventListener("click", fecharViewer);
   $("viewerPrev").addEventListener("click", function(){ viewerNav(-1); });
   $("viewerNext").addEventListener("click", function(){ viewerNav(1); });
+  $("viewerFoot").addEventListener("click", function(e){
+    if(e.target.closest("#btnFull")) toggleFullscreen();
+  });
+  // mantém o estado em sincronia se sair da tela cheia pelo botão voltar
+  document.addEventListener("fullscreenchange", function(){
+    if(!document.fullscreenElement) $("viewer").classList.remove("maximizado");
+  });
+  document.addEventListener("webkitfullscreenchange", function(){
+    if(!document.webkitFullscreenElement) $("viewer").classList.remove("maximizado");
+  });
   bindSwipe();
 
   // botão voltar do Android fecha viewer/drawer
