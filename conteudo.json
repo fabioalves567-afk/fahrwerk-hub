@@ -1,6 +1,6 @@
 {
-  "versao": "1.5.0",
-  "atualizadoEm": "2026-05-31T11:00:00",
+  "versao": "1.6.0",
+  "atualizadoEm": "2026-05-31T11:30:00",
   "setor": "Fahrwerk",
   "categorias": [
     {
@@ -30,7 +30,14 @@
       ]
     },
     { "id": "inovacao", "nome": "Inovação", "icone": "💡", "cor": "#00c853", "descricao": "Ideias, projetos e melhorias do setor", "itens": [] },
-    { "id": "auditorias", "nome": "Auditorias", "icone": "📋", "cor": "#7c4dff", "descricao": "Preparação VDA e checklists de auditoria", "itens": [] },
+    {
+      "id": "auditorias", "nome": "Auditorias", "icone": "📋", "cor": "#7c4dff",
+      "descricao": "Preparação VDA e checklists de auditoria",
+      "itens": [
+        { "id": "aud-01", "titulo": "Auditoria de Processo VDA 6.3", "tipo": "imagem", "data": "2026-05-31", "tag": "novo",
+          "paginas": ["vda-1.jpg","vda-2.jpg","vda-3.jpg","vda-4.jpg","vda-5.jpg","vda-6.jpg","vda-7.jpg","vda-8.jpg","vda-9.jpg","vda-10.jpg","vda-11.jpg"] }
+      ]
+    },
     {
       "id": "procedimentos", "nome": "Procedimentos", "icone": "📑", "cor": "#00bfa5",
       "descricao": "Documentos técnicos e procedimentos padrão",
