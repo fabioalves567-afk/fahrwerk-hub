@@ -1,6 +1,6 @@
 {
-  "versao": "1.4.0",
-  "atualizadoEm": "2026-05-31T10:30:00",
+  "versao": "1.5.0",
+  "atualizadoEm": "2026-05-31T11:00:00",
   "setor": "Fahrwerk",
   "categorias": [
     {
@@ -21,7 +21,14 @@
     },
     { "id": "operacoes", "nome": "Operações", "icone": "⚙️", "cor": "#00b0ff", "descricao": "Padrões operacionais e sequências de montagem", "itens": [] },
     { "id": "informativos", "nome": "Informativos", "icone": "📢", "cor": "#ffd600", "descricao": "Comunicados, metas e avisos do setor", "itens": [] },
-    { "id": "volkswagen", "nome": "Cultura Volkswagen", "icone": "🚗", "cor": "#001e50", "descricao": "Valores, princípios e cultura da fábrica", "itens": [] },
+    {
+      "id": "volkswagen", "nome": "Cultura Volkswagen", "icone": "🚗", "cor": "#001e50",
+      "descricao": "Valores, princípios e cultura da fábrica",
+      "itens": [
+        { "id": "vw-01", "titulo": "Volkswagen Gol: A Engenharia de um Ícone", "tipo": "imagem", "data": "2026-05-31", "tag": "novo",
+          "paginas": ["gol-1.jpg","gol-2.jpg","gol-3.jpg","gol-4.jpg","gol-5.jpg","gol-6.jpg","gol-7.jpg","gol-8.jpg","gol-9.jpg","gol-10.jpg","gol-11.jpg","gol-12.jpg"] }
+      ]
+    },
     { "id": "inovacao", "nome": "Inovação", "icone": "💡", "cor": "#00c853", "descricao": "Ideias, projetos e melhorias do setor", "itens": [] },
     { "id": "auditorias", "nome": "Auditorias", "icone": "📋", "cor": "#7c4dff", "descricao": "Preparação VDA e checklists de auditoria", "itens": [] },
     {
