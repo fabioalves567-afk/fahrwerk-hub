@@ -1,6 +1,6 @@
 {
-  "versao": "1.2.0",
-  "atualizadoEm": "2026-05-31T00:30:00",
+  "versao": "1.2.1",
+  "atualizadoEm": "2026-05-31T01:00:00",
   "setor": "Fahrwerk",
   "categorias": [
     {
@@ -12,73 +12,24 @@
       "itens": [
         { "id": "seg-01", "titulo": "Proteção das Mãos — Risco Mecânico", "tipo": "imagem", "data": "2026-05-31", "tag": "obrigatório",
           "paginas": [
-            "slides/seguranca/maos-1.jpg",
-            "slides/seguranca/maos-2.jpg",
-            "slides/seguranca/maos-3.jpg",
-            "slides/seguranca/maos-4.jpg",
-            "slides/seguranca/maos-5.jpg",
-            "slides/seguranca/maos-6.jpg",
-            "slides/seguranca/maos-7.jpg",
-            "slides/seguranca/maos-8.jpg",
-            "slides/seguranca/maos-9.jpg"
+            "maos-1.jpg",
+            "maos-2.jpg",
+            "maos-3.jpg",
+            "maos-4.jpg",
+            "maos-5.jpg",
+            "maos-6.jpg",
+            "maos-7.jpg",
+            "maos-8.jpg",
+            "maos-9.jpg"
           ] }
       ]
     },
-    {
-      "id": "qualidade",
-      "nome": "Qualidade",
-      "icone": "🔍",
-      "cor": "#0040c1",
-      "descricao": "Padrões, defeitos críticos e controle de qualidade",
-      "itens": []
-    },
-    {
-      "id": "operacoes",
-      "nome": "Operações",
-      "icone": "⚙️",
-      "cor": "#00b0ff",
-      "descricao": "Padrões operacionais e sequências de montagem",
-      "itens": []
-    },
-    {
-      "id": "informativos",
-      "nome": "Informativos",
-      "icone": "📢",
-      "cor": "#ffd600",
-      "descricao": "Comunicados, metas e avisos do setor",
-      "itens": []
-    },
-    {
-      "id": "volkswagen",
-      "nome": "Cultura Volkswagen",
-      "icone": "🚗",
-      "cor": "#001e50",
-      "descricao": "Valores, princípios e cultura da fábrica",
-      "itens": []
-    },
-    {
-      "id": "inovacao",
-      "nome": "Inovação",
-      "icone": "💡",
-      "cor": "#00c853",
-      "descricao": "Ideias, projetos e melhorias do setor",
-      "itens": []
-    },
-    {
-      "id": "auditorias",
-      "nome": "Auditorias",
-      "icone": "📋",
-      "cor": "#7c4dff",
-      "descricao": "Preparação VDA e checklists de auditoria",
-      "itens": []
-    },
-    {
-      "id": "procedimentos",
-      "nome": "Procedimentos",
-      "icone": "📑",
-      "cor": "#00bfa5",
-      "descricao": "Documentos técnicos e procedimentos padrão",
-      "itens": []
-    }
+    { "id": "qualidade", "nome": "Qualidade", "icone": "🔍", "cor": "#0040c1", "descricao": "Padrões, defeitos críticos e controle de qualidade", "itens": [] },
+    { "id": "operacoes", "nome": "Operações", "icone": "⚙️", "cor": "#00b0ff", "descricao": "Padrões operacionais e sequências de montagem", "itens": [] },
+    { "id": "informativos", "nome": "Informativos", "icone": "📢", "cor": "#ffd600", "descricao": "Comunicados, metas e avisos do setor", "itens": [] },
+    { "id": "volkswagen", "nome": "Cultura Volkswagen", "icone": "🚗", "cor": "#001e50", "descricao": "Valores, princípios e cultura da fábrica", "itens": [] },
+    { "id": "inovacao", "nome": "Inovação", "icone": "💡", "cor": "#00c853", "descricao": "Ideias, projetos e melhorias do setor", "itens": [] },
+    { "id": "auditorias", "nome": "Auditorias", "icone": "📋", "cor": "#7c4dff", "descricao": "Preparação VDA e checklists de auditoria", "itens": [] },
+    { "id": "procedimentos", "nome": "Procedimentos", "icone": "📑", "cor": "#00bfa5", "descricao": "Documentos técnicos e procedimentos padrão", "itens": [] }
   ]
 }
