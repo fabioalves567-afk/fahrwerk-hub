@@ -768,7 +768,7 @@ function mediaErro(body,emoji,msg,arq){
 function abrirExterno(url){ try{ window.open(url,"_blank","noopener"); }catch(e){} }
 function emFullscreen(){ return document.fullscreenElement || document.webkitFullscreenElement || $("viewer").classList.contains("maximizado"); }
 var FIT_KEY="fahrwerk_fit_v1", chromeTimer=null;
-function fitPref(){ try{ return localStorage.getItem(FIT_KEY)==="contain" ? "contain" : "cover"; }catch(e){ return "cover"; } }
+function fitPref(){ try{ return localStorage.getItem(FIT_KEY)==="cover" ? "cover" : "contain"; }catch(e){ return "contain"; } }
 function applyFitTo(img){ if(img) img.classList.toggle("fill", fitPref()==="cover"); }
 function updateFitBtn(){ var b=$("viewerFit"); if(b) b.textContent = (fitPref()==="cover") ? "⤢" : "▭"; }
 function scheduleChromeHide(){ clearTimeout(chromeTimer); chromeTimer=setTimeout(function(){ $("viewer").classList.add("chrome-off"); },2400); }
