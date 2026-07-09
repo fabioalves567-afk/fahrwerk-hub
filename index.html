@@ -279,6 +279,11 @@
     color:#fff;font-weight:700;font-size:14px;padding:12px 24px;border-radius:10px;
   }
   .open-btn:active{filter:brightness(1.1)}
+  /* --- ajuste do visor: controles somem sozinhos + preencher/inteiro --- */
+  .viewer-bar,.viewer-foot,.nav-arrow{transition:opacity .28s ease}
+  .viewer.chrome-off .viewer-bar,.viewer.chrome-off .viewer-foot,.viewer.chrome-off .nav-arrow{opacity:0;pointer-events:none}
+  .viewer.chrome-off .viewer-exit{display:flex;align-items:center;justify-content:center;position:absolute;top:calc(var(--safe-top) + 8px);right:12px;z-index:8;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.55);color:#fff;font-size:20px;cursor:pointer;backdrop-filter:blur(4px)}
+  .viewer-body img.fill{object-fit:cover}
   /* fallback de tela cheia (navegadores sem Fullscreen API, ex. iPhone) */
   .viewer.maximizado .viewer-bar{display:none}
   .viewer.maximizado .viewer-foot{display:none}
@@ -371,6 +376,7 @@
   <div class="viewer-bar">
     <button class="icon-btn" id="viewerClose">✕</button>
     <div class="vt" id="viewerTitle"></div>
+    <button class="icon-btn" id="viewerFit" title="Preencher / Inteiro">⤢</button>
   </div>
   <div class="rotate-hint" id="rotateHint">📱 ↻ Vire o celular para visualizar melhor</div>
   <button class="viewer-exit" id="viewerExit">✕</button>
@@ -726,6 +732,7 @@ function mostrarItem(){
   var body=$("viewerBody");
   var olds=body.querySelectorAll(".media"); olds.forEach(function(n){n.remove();});
   var foot=$("viewerFoot");
+  $("viewer").classList.remove("chrome-off"); clearTimeout(chromeTimer); updateFitBtn();
 
   if(tipo==="link"){
     abrirExterno(atual);
@@ -741,6 +748,9 @@ function mostrarItem(){
     var img=el("img","media"); img.src=atual; img.alt=item.titulo;
     img.onerror=function(){ mediaErro(body,"🖼️","Imagem não encontrada",atual); };
     body.appendChild(img);
+    applyFitTo(img);
+    img.addEventListener("click", toggleChrome);
+    scheduleChromeHide();
     var pg = total>1 ? '<div style="color:var(--txt2);font-size:13px;margin-bottom:9px">Página '+(state.viewer.idx+1)+' de '+total+' — deslize ou use as setas</div>' : '';
     foot.innerHTML = pg + '<button class="open-btn" id="btnFull">⤢ Tela cheia</button>';
   }
@@ -757,6 +767,13 @@ function mediaErro(body,emoji,msg,arq){
 }
 function abrirExterno(url){ try{ window.open(url,"_blank","noopener"); }catch(e){} }
 function emFullscreen(){ return document.fullscreenElement || document.webkitFullscreenElement || $("viewer").classList.contains("maximizado"); }
+var FIT_KEY="fahrwerk_fit_v1", chromeTimer=null;
+function fitPref(){ try{ return localStorage.getItem(FIT_KEY)==="contain" ? "contain" : "cover"; }catch(e){ return "cover"; } }
+function applyFitTo(img){ if(img) img.classList.toggle("fill", fitPref()==="cover"); }
+function updateFitBtn(){ var b=$("viewerFit"); if(b) b.textContent = (fitPref()==="cover") ? "⤢" : "▭"; }
+function scheduleChromeHide(){ clearTimeout(chromeTimer); chromeTimer=setTimeout(function(){ $("viewer").classList.add("chrome-off"); },2400); }
+function toggleChrome(){ var vw=$("viewer"); if(vw.classList.contains("chrome-off")){ vw.classList.remove("chrome-off"); scheduleChromeHide(); } else { vw.classList.add("chrome-off"); clearTimeout(chromeTimer); } }
+function toggleFit(){ var v=(fitPref()==="cover")?"contain":"cover"; try{ localStorage.setItem(FIT_KEY,v); }catch(e){} var cur=$("viewerBody").querySelector("img.media"); if(cur) cur.classList.toggle("fill", v==="cover"); updateFitBtn(); }
 function toggleFullscreen(){
   var vw=$("viewer");
   if(document.fullscreenElement || document.webkitFullscreenElement){
@@ -775,7 +792,7 @@ function fecharViewer(){
     var exit=document.exitFullscreen||document.webkitExitFullscreen;
     if(exit) try{ exit.call(document); }catch(e){}
   }
-  var vw=$("viewer"); vw.classList.remove("show"); vw.classList.remove("maximizado");
+  var vw=$("viewer"); vw.classList.remove("show"); vw.classList.remove("maximizado"); vw.classList.remove("chrome-off"); clearTimeout(chromeTimer);
   var body=$("viewerBody"); var olds=body.querySelectorAll(".media"); olds.forEach(function(n){n.remove();});
 }
 function viewerNav(d){
@@ -868,6 +885,8 @@ function bindEventos(){
   $("viewerExit").addEventListener("click", fecharViewer);
   $("viewerPrev").addEventListener("click", function(){ viewerNav(-1); });
   $("viewerNext").addEventListener("click", function(){ viewerNav(1); });
+  var _fb=$("viewerFit"); if(_fb) _fb.addEventListener("click", toggleFit);
+  updateFitBtn();
   $("viewerFoot").addEventListener("click", function(e){
     if(e.target.closest("#btnFull")) toggleFullscreen();
   });
